@@ -7,13 +7,16 @@ import getPageNumbers from "@utils/getPageNumbers";
 import getPagination from "@utils/getPagination";
 
 export interface Props {
-  post: CollectionEntry<"blog">;
+  post: CollectionEntry<"programming | thoughts">;
   tag: string;
   tagName: string;
 }
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const programming = await getCollection("programming");
+  const thoughts = await getCollection("thoughts");
+
+  const posts = programming.concat(thoughts)
 
   const tags = getUniqueTags(posts);
 
@@ -31,9 +34,11 @@ export async function getStaticPaths() {
 const { page } = Astro.params;
 const { tag, tagName } = Astro.props;
 
-const posts = await getCollection("blog", ({ data }) => !data.draft);
+const programmingPosts = await getCollection("programming", ({ data }) => !data.draft);
+const thoughtPosts = await getCollection("thoughts", ({ data }) => !data.draft);
 
-const postsByTag = getPostsByTag(posts, tag);
+const postsByTag = getPostsByTag(programmingPosts.concat(thoughtPosts), tag);
+
 
 const pagination = getPagination({
   posts: postsByTag,

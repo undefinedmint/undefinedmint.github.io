@@ -1,16 +1,20 @@
 import { SITE } from "@config";
 import getPageNumbers from "./getPageNumbers";
+import type { PostType } from "astro:content";
+
 
 interface GetPaginationProps<T> {
   posts: T;
   page: string | number;
   isIndex?: boolean;
+  path: PostType
 }
 
 const getPagination = <T>({
   posts,
   page,
   isIndex = false,
+  path
 }: GetPaginationProps<T[]>) => {
   const totalPagesArray = getPageNumbers(posts.length);
   const totalPages = totalPagesArray.length;
@@ -29,6 +33,7 @@ const getPagination = <T>({
     totalPages,
     currentPage,
     paginatedPosts,
+    path
   };
 };
 

@@ -11,12 +11,13 @@ import { SITE } from "@config";
 export interface Props {
   currentPage: number;
   totalPages: number;
-  paginatedPosts: CollectionEntry<"blog">[];
+  paginatedPosts: CollectionEntry<"programming | thoughts">[];
   tag: string;
   tagName: string;
 }
 
 const { currentPage, totalPages, paginatedPosts, tag, tagName } = Astro.props;
+
 ---
 
 <Layout title={`Tag: ${tagName} | ${SITE.title}`}>
@@ -30,7 +31,7 @@ const { currentPage, totalPages, paginatedPosts, tag, tagName } = Astro.props;
     <ul>
       {
         paginatedPosts.map(({ data, slug }) => (
-          <Card href={`/posts/${slug}/`} frontmatter={data} />
+          <Card href={`/${data.type}/${slug}/`} frontmatter={data} />
         ))
       }
     </ul>

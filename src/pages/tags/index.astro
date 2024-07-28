@@ -8,9 +8,11 @@ import Tag from "@components/Tag.astro";
 import getUniqueTags from "@utils/getUniqueTags";
 import { SITE } from "@config";
 
-const posts = await getCollection("blog");
+const programming = await getCollection("programming");
+const thoughts = await getCollection("thoughts");
 
-let tags = getUniqueTags(posts);
+
+let tags = getUniqueTags(programming.concat(thoughts));
 ---
 
 <Layout title={`Tags | ${SITE.title}`}>

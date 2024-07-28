@@ -4,7 +4,7 @@ import Posts from "@layouts/Posts.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import getPagination from "@utils/getPagination";
 
-const posts = await getCollection("blog");
+const posts = await getCollection("thoughts");
 
 const sortedPosts = getSortedPosts(posts);
 
@@ -12,6 +12,7 @@ const pagination = getPagination({
   posts: sortedPosts,
   page: 1,
   isIndex: true,
+  path: "thoughts"
 });
 ---
 
