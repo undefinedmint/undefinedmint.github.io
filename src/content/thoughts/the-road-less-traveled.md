@@ -27,7 +27,6 @@ Developing a terminal-like website using ReactJS, TypeScript and Styled-Componen
 
 ## Intro
 
-Recently, I've developed and published my portfolio + a blog. I’m glad I got some good feedback for it. Today, I want to introduce my new terminal-like portfolio website. It is developed using ReactJS, TypeScript. I got this idea from CodePen and YouTube.
 
 ## Tech Stack
 
