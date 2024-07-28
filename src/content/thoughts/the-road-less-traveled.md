@@ -25,9 +25,6 @@ Developing a terminal-like website using ReactJS, TypeScript and Styled-Componen
 
 ## Table of contents
 
-## Intro
-
-
 ## Tech Stack
 
 This project is a frontend project without any backend codes. The UI/UX part is designed in Figma. For the frontend user-interface, I chose React over pain JavaScript and NextJS. Why?
