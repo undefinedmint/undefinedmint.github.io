@@ -26,22 +26,22 @@ export const LOGO_IMAGE = {
 };
 
 export const SOCIALS: SocialObjects = [
-  {
-    name: "Github",
-    href: "https://github.com/undefinedmint",
-    linkTitle: `Me on Github`,
-    active: true,
-  },
-  {
-    name: "Instagram",
-    href: "https://instagram.com/i__am__mint/",
-    linkTitle: `Me on Instagram`,
-    active: true,
-  },
+  // {
+  //   name: "Github",
+  //   href: "https://github.com/undefinedmint",
+  //   linkTitle: `Me on Github`,
+  //   active: true,
+  // },
+  // {
+  //   name: "Instagram",
+  //   href: "https://instagram.com/i__am__mint/",
+  //   linkTitle: `Me on Instagram`,
+  //   active: false,
+  // },
   {
     name: "Mail",
     href: "mailto:undefinedmint@proton.me",
-    linkTitle: `Send an email to ${SITE.title}`,
+    linkTitle: `Send an email to Mint`,
     active: true,
   },
 ];

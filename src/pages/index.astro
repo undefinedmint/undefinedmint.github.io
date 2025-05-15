@@ -27,14 +27,14 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   <main id="main-content">
     <section id="hero">
       <p>
-        Here I share my journey of learning about Front-End development and exploring the world.
+        Here I share my journey of programming and exploring the world.
       </p>
       {
         // only display if at least one social link is enabled
 
         socialCount > 0 && (
           <div class="social-wrapper">
-            <div class="social-links">Social Links:</div>
+            <div class="social-links">E-mail:</div>
             <Socials />
           </div>
         )
