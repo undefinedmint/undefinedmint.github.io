@@ -1,7 +1,7 @@
 import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
-  website: "https://astro-paper.pages.dev/", // replace this with your deployed domain
+  website: "https://mintu.org", // replace this with your deployed domain
   author: "Mint",
   profile: "https://satnaing.dev/",
   desc: "Mint's Hello World",
@@ -41,7 +41,14 @@ export const SOCIALS: SocialObjects = [
   {
     name: "Mail",
     href: "mailto:undefinedmint@proton.me",
-    linkTitle: `Send an email to Mint`,
+    linkTitle: `Send an email to me`,
     active: true,
   },
+  {
+    name: "WeChat",
+    href: "/assets/wechat-qrcode.jpg",
+    linkTitle: `Add me on WeChat: i__am__mint`,
+    active: true,
+  },
+  
 ];

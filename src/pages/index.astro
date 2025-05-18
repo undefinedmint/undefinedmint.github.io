@@ -34,7 +34,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
         socialCount > 0 && (
           <div class="social-wrapper">
-            <div class="social-links">E-mail:</div>
+            <div class="social-links">Let's connect:</div>
             <Socials />
           </div>
         )
@@ -128,7 +128,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     }
 
     #hero p {
-        @apply my-2;
+        @apply my-2 tracking-wide;
     }
 
     .social-wrapper {
@@ -136,7 +136,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     }
 
     .social-links {
-        @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
+        @apply mb-1 mr-2 whitespace-nowrap sm:mb-0 tracking-wide;
     }
 
     /* ===== Featured & Recent Posts Sections ===== */
@@ -152,5 +152,9 @@ const socialCount = SOCIALS.filter(social => social.active).length;
 
     .all-posts-btn-wrapper {
         @apply my-8 text-center;
+    }
+
+    .type-title {
+        @apply text-2xl tracking-wide;
     }
 </style>

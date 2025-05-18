@@ -29,7 +29,7 @@
     display: block;
   }
   body {
-    @apply flex min-h-[100svh] flex-col bg-skin-fill font-mono text-skin-base 
+    @apply flex min-h-[100svh] flex-col bg-skin-fill font-sans text-skin-base tracking-wide
     selection:bg-skin-accent selection:bg-opacity-70 selection:text-skin-inverted;
   }
   section,
@@ -49,8 +49,8 @@
     sm:scale-110;
   }
   .prose {
-    @apply prose-headings:!mb-3 prose-headings:!text-skin-base 
-    prose-h3:italic prose-p:!text-skin-base 
+    @apply prose-headings:!mb-3 prose-headings:!text-skin-base prose-headings:font-sans
+    prose-h3:italic prose-p:!text-skin-base prose-p:!text-lg prose-p:font-sans
     prose-a:!text-skin-base prose-a:!decoration-dashed prose-a:underline-offset-8
     hover:prose-a:text-skin-accent prose-blockquote:!border-l-skin-accent
     prose-blockquote:border-opacity-50 prose-blockquote:opacity-80
@@ -58,12 +58,12 @@
     prose-strong:!text-skin-base
 
     
-    prose-code:rounded prose-code:bg-skin-card 
+    prose-code:rounded prose-code:bg-skin-card prose-code:font-mono
     prose-code:bg-opacity-75 prose-code:p-1 
     prose-code:before:!content-none prose-code:after:!content-none
-    prose-ol:!text-skin-base 
-    prose-ul:overflow-x-clip prose-ul:!text-skin-base prose-li:marker:!text-skin-accent
-    prose-table:text-skin-base prose-th:border
+    prose-ol:!text-skin-base prose-ol:!text-lg prose-ol:font-sans
+    prose-ul:overflow-x-clip prose-ul:!text-skin-base prose-ul:!text-lg prose-ul:font-sans prose-li:marker:!text-skin-accent
+    prose-table:text-skin-base prose-th:border prose-table:font-sans
     prose-th:border-skin-line prose-td:border 
     prose-td:border-skin-line prose-img:!my-2 
     prose-img:mx-auto prose-img:border-2 
@@ -92,7 +92,7 @@
   .type-title {
     margin-top: 20px;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 24px;
   }
   /* ===== scrollbar ===== */
   html {

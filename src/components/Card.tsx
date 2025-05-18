@@ -1,10 +1,10 @@
 import { slugifyStr } from "@utils/slugify";
 import Datetime from "./Datetime";
-import type { CollectionEntry, PostType } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 
 export interface Props {
   href?: string;
-  frontmatter: CollectionEntry<PostType>["data"];
+  frontmatter: CollectionEntry<"programming" | "thoughts">["data"];
   secHeading?: boolean;
 }
 
@@ -13,7 +13,7 @@ export default function Card({ href, frontmatter, secHeading = true }: Props) {
 
   const headerProps = {
     style: { viewTransitionName: slugifyStr(title) },
-    className: "text-lg font-medium decoration-dashed hover:underline",
+    className: "text-lg font-medium decoration-dashed hover:underline tracking-wide",
   };
 
   return (
@@ -29,7 +29,7 @@ export default function Card({ href, frontmatter, secHeading = true }: Props) {
         )}
       </a>
       <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
-      <p>{description}</p>
+      <p className="tracking-wide">{description}</p>
     </li>
   );
 }

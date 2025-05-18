@@ -55,7 +55,18 @@ module.exports = {
         transparent: "transparent",
       },
       fontFamily: {
-        mono: ["IBM Plex Mono", "monospace"],
+        mono: ["IBM Plex Mono", "Consolas", "monospace"],
+        sans: [
+          "Inter",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif",
+        ],
+        serif: ["Merriweather", "Georgia", "Cambria", "serif"],
       },
 
       typography: {
@@ -66,6 +77,13 @@ module.exports = {
             },
             code: {
               color: false,
+            },
+            fontSize: '1.125rem',  // 对应text-lg，18px
+            lineHeight: '1.75',
+            letterSpacing: '0.01em',
+            p: {
+              marginTop: '1.25em',
+              marginBottom: '1.25em',
             },
           },
         },
