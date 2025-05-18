@@ -1,0 +1,64 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import CategorySidebar from "@components/CategorySidebar.astro";
+import type { Categories } from "@utils/getCategories";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+
+export interface Props {
+  title?: string;
+  categories: Categories;
+  activeCategory?: string;
+  activeSubcategory?: string;
+}
+
+const { 
+  title = "Programming", 
+  categories,
+  activeCategory,
+  activeSubcategory,
+} = Astro.props;
+---
+
+<Layout title={title}>
+  <Header activeNav="programming" />
+  
+  <div class="flex-container">
+    <aside class="sidebar">
+      <CategorySidebar 
+        categories={categories} 
+        activeCategory={activeCategory}
+        activeSubcategory={activeSubcategory}
+        baseUrl="/programming"
+      />
+    </aside>
+
+    <div class="main-content">
+      <Breadcrumbs />
+      <main id="main-content">
+        <slot />
+      </main>
+    </div>
+  </div>
+
+  <Footer />
+</Layout>
+
+<style>
+  .flex-container {
+    @apply flex flex-col md:flex-row max-w-7xl mx-auto px-4 pt-6;
+  }
+
+  .sidebar {
+    @apply md:w-64 flex-shrink-0 mb-6 md:mb-0 md:mr-8;
+  }
+
+  .main-content {
+    @apply flex-grow min-w-0;
+  }
+
+  #main-content {
+    @apply pb-24;
+  }
+</style> 

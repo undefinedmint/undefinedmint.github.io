@@ -1,0 +1,124 @@
+---
+// TableOfContents.astro
+// 用于从文章内容中提取标题并显示目录
+
+export interface Props {
+  headings: {
+    depth: number;
+    slug: string;
+    text: string;
+  }[];
+}
+
+const { headings } = Astro.props;
+
+// 过滤掉不需要的标题深度，通常只需要 h2 和 h3
+const filteredHeadings = headings.filter(
+  heading => heading.depth >= 2 && heading.depth <= 3
+);
+---
+
+{
+  filteredHeadings.length > 0 && (
+    <nav class="toc">
+      <div class="toc-title">Table of Contents</div>
+      <ul>
+        {filteredHeadings.map(heading => (
+          <li
+            class={`toc-item toc-item-h${heading.depth}`}
+            data-heading={heading.slug}
+          >
+            <a href={`#${heading.slug}`}>{heading.text}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .toc {
+    @apply my-4 rounded border border-skin-line p-4;
+  }
+
+  .toc-title {
+    @apply mb-2 text-lg font-semibold;
+  }
+
+  .toc ul {
+    @apply list-none pl-0;
+  }
+
+  .toc-item {
+    @apply py-1;
+  }
+
+  .toc-item-h2 {
+    @apply pl-0;
+  }
+
+  .toc-item-h3 {
+    @apply pl-4;
+  }
+
+  .toc a {
+    @apply hover:text-skin-accent;
+  }
+
+  .toc-item.active > a {
+    @apply font-bold text-skin-accent;
+  }
+</style>
+
+<script>
+  // 在页面加载后运行
+  document.addEventListener('DOMContentLoaded', () => {
+    // 平滑滚动到点击的标题
+    const tocLinks = document.querySelectorAll('.toc a');
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href')?.substring(1);
+        const targetElement = document.getElementById(targetId || '');
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+          // 更新URL但不跳转页面
+          history.pushState(null, '', `#${targetId}`);
+        }
+      });
+    });
+
+    // 高亮显示当前活跃的目录项
+    const tocItems = document.querySelectorAll<HTMLElement>('.toc-item');
+    const headingElements = document.querySelectorAll('h2, h3');
+    
+    const highlightActiveHeading = () => {
+      const scrollPosition = window.scrollY;
+      
+      // 找到当前可见的标题
+      let currentHeading: string | null = null;
+      headingElements.forEach(heading => {
+        const top = heading.getBoundingClientRect().top + window.scrollY - 100;
+        if (scrollPosition >= top) {
+          currentHeading = heading.id;
+        }
+      });
+      
+      // 更新活跃的目录项
+      tocItems.forEach(item => {
+        if (item.dataset.heading === currentHeading) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    };
+    
+    // 页面滚动时更新活跃项
+    window.addEventListener('scroll', highlightActiveHeading);
+    
+    // 页面加载时初始化
+    highlightActiveHeading();
+  });
+</script> 

@@ -7,6 +7,7 @@ import Datetime from "@components/Datetime";
 import type { CollectionEntry } from "astro:content";
 import { slugifyStr } from "@utils/slugify";
 import ShareLinks from "@components/ShareLinks.astro";
+import TableOfContents from "@components/TableOfContents.astro";
 import { SITE } from "@config";
 
 
@@ -27,7 +28,7 @@ const {
   tags,
 } = post.data;
 
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 
 const ogImageUrl = typeof ogImage === "string" ? ogImage : ogImage?.src;
 const ogUrl = new URL(
@@ -74,12 +75,15 @@ const layoutProps = {
       size="lg"
       className="my-2"
     />
+    
+    {headings.length > 0 && <TableOfContents headings={headings} />}
+    
     <article id="article" class="prose mx-auto mt-8 max-w-3xl">
       <Content />
     </article>
 
     <ul class="my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} />)}
+      {tags.map((tag: string) => <Tag tag={slugifyStr(tag)} />)}
     </ul>
 
     <div
