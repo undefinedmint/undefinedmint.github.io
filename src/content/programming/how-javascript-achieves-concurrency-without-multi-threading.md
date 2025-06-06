@@ -1,5 +1,5 @@
 ---
-title: How JavaScript Achieves Concurrency Without Multi-Threading - Event Loop, Workers, and More
+title: How JavaScript Achieves Concurrency Without Multi-Threading
 type: programming
 author: Mint
 pubDatetime: 2024-08-23T12:05:51Z

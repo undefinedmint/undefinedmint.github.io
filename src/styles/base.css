@@ -98,26 +98,37 @@
   /* ===== scrollbar ===== */
   html {
     overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color-accent), 0.2) transparent;
   }
 
   /* width */
   ::-webkit-scrollbar {
-    @apply w-3;
+    width: 8px;
   }
 
   /* Track */
   ::-webkit-scrollbar-track {
-    @apply bg-skin-fill;
+    background: transparent;
+    border-radius: 4px;
   }
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    @apply bg-skin-card;
+    background: rgba(var(--color-accent), 0.2);
+    border-radius: 4px;
+    transition: all 0.3s ease;
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-skin-card-muted;
+    background: rgba(var(--color-accent), 0.4);
+    width: 10px;
+  }
+
+  /* Handle on active */
+  ::-webkit-scrollbar-thumb:active {
+    background: rgba(var(--color-accent), 0.6);
   }
 
   /* ===== Code Blocks & Syntax Highlighting ===== */

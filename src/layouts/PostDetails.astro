@@ -141,7 +141,23 @@ const layoutProps = {
     max-height: calc(100vh - 6rem);
     overflow-y: auto;
     padding-left: 0;
+    
+    /* 自定义滚动条样式 */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--color-accent), 0.1) transparent;
   }
+
+  /* Webkit 滚动条样式 */
+  .toc-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .toc-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  
 
   /* 大屏幕显示侧边栏 */
   @media (min-width: 1024px) {
