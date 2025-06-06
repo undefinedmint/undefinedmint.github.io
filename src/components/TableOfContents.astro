@@ -38,11 +38,11 @@ const filteredHeadings = headings.filter(
 
 <style>
   .toc {
-    @apply my-4 rounded border border-skin-line p-4;
+    @apply my-6 rounded-lg border border-skin-line bg-skin-fill/50 p-5 shadow-sm backdrop-blur-sm;
   }
 
   .toc-title {
-    @apply mb-2 text-lg font-semibold;
+    @apply text-lg font-bold text-skin-accent border-b border-skin-line/30 pb-2;
   }
 
   .toc ul {
@@ -50,23 +50,61 @@ const filteredHeadings = headings.filter(
   }
 
   .toc-item {
-    @apply py-1;
+    @apply py-0.5 transition-all duration-200 ease-in-out;
   }
 
   .toc-item-h2 {
     @apply pl-0;
   }
 
+  .toc-item-h2 > a {
+    @apply text-skin-accent font-semibold text-base;
+  }
+
   .toc-item-h3 {
-    @apply pl-4;
+    @apply pl-6 relative;
+    font-size: 14px;
+  }
+
+  .toc-item-h3::before {
+    content: "•";
+    @apply absolute left-3 text-skin-base opacity-40;
   }
 
   .toc a {
-    @apply hover:text-skin-accent;
+    @apply hover:text-skin-accent transition-colors duration-200 text-skin-base/80 no-underline;
+    display: block;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  .toc a:hover {
+    @apply bg-skin-accent/10;
   }
 
   .toc-item.active > a {
-    @apply font-bold text-skin-accent;
+    @apply font-bold text-skin-accent bg-skin-accent/15;
+    border-left: 3px solid;
+    @apply border-skin-accent;
+  }
+
+  .toc-item-h2.active > a {
+    @apply bg-skin-accent/20;
+  }
+
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .toc {
+      @apply mx-2 p-4;
+    }
+    
+    .toc-item-h3 {
+      @apply pl-4;
+    }
+    
+    .toc-item-h3::before {
+      @apply left-1;
+    }
   }
 </style>
 
