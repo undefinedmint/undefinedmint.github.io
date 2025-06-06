@@ -65,7 +65,7 @@ Instead of multi-threading, JavaScript uses an **Event Loop** to manage asynchro
     - Execute **one** Macrotask.
     - Repeat.
 
-
+![SVG ](../../assets/programming/how-javascript-achieves-concurrency-without-multi-threading/event_loop.svg)
 ## 3. How **Web Workers** bring multi-threading to JavaScript
 ### What Web Worker is
 
