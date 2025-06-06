@@ -38,7 +38,7 @@ const filteredHeadings = headings.filter(
 
 <style>
   .toc {
-    @apply my-6 rounded-lg border border-skin-line bg-skin-fill/50 p-5 shadow-sm backdrop-blur-sm;
+    @apply m-0 rounded-lg border border-skin-line bg-skin-fill/50 p-4 shadow-sm backdrop-blur-sm;
   }
 
   .toc-title {
@@ -132,16 +132,34 @@ const filteredHeadings = headings.filter(
     const headingElements = document.querySelectorAll('h2, h3');
     
     const highlightActiveHeading = () => {
-      const scrollPosition = window.scrollY;
+      const scrollPosition = window.scrollY + 150; // 增加偏移量使高亮更准确
+      
+      // 创建标题位置数组
+      const headingPositions = Array.from(headingElements).map(heading => ({
+        id: heading.id,
+        top: heading.getBoundingClientRect().top + window.scrollY,
+        element: heading
+      })).sort((a, b) => a.top - b.top);
       
       // 找到当前可见的标题
       let currentHeading: string | null = null;
-      headingElements.forEach(heading => {
-        const top = heading.getBoundingClientRect().top + window.scrollY - 100;
-        if (scrollPosition >= top) {
-          currentHeading = heading.id;
+      
+      for (let i = 0; i < headingPositions.length; i++) {
+        const current = headingPositions[i];
+        const next = headingPositions[i + 1];
+        
+        if (scrollPosition >= current.top) {
+          if (!next || scrollPosition < next.top) {
+            currentHeading = current.id;
+            break;
+          }
         }
-      });
+      }
+      
+      // 如果没有找到，使用第一个标题
+      if (!currentHeading && headingPositions.length > 0) {
+        currentHeading = headingPositions[0].id;
+      }
       
       // 更新活跃的目录项
       tocItems.forEach(item => {
@@ -153,8 +171,20 @@ const filteredHeadings = headings.filter(
       });
     };
     
+    // 使用节流函数优化滚动性能
+    let ticking = false;
+    const scrollHandler = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          highlightActiveHeading();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    
     // 页面滚动时更新活跃项
-    window.addEventListener('scroll', highlightActiveHeading);
+    window.addEventListener('scroll', scrollHandler, { passive: true });
     
     // 页面加载时初始化
     highlightActiveHeading();

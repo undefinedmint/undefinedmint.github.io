@@ -10,7 +10,7 @@ export interface Props {
 const { activeNav } = Astro.props;
 ---
 
-<header>
+<header class="header-fixed">
   <a id="skip-to-content" href="#main-content">Skip to content</a>
   <div class="nav-container">
     <div class="top-nav-wrap">
@@ -117,6 +117,10 @@ const { activeNav } = Astro.props;
 </header>
 
 <style>
+  .header-fixed {
+    @apply fixed top-0 z-30 w-full bg-skin-fill/90 backdrop-blur-sm border-b border-skin-line/20;
+  }
+  
   #skip-to-content {
     @apply absolute -top-full left-16 z-50 bg-skin-accent px-3 py-2 text-skin-inverted transition-all focus:top-4;
   }

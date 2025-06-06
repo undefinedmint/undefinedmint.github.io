@@ -31,6 +31,7 @@
   body {
     @apply flex min-h-[100svh] flex-col bg-skin-fill font-sans text-skin-base tracking-wide
     selection:bg-skin-accent selection:bg-opacity-70 selection:text-skin-inverted;
+    padding-top: 5rem; /* 为固定Header留出空间 */
   }
   section,
   footer {
