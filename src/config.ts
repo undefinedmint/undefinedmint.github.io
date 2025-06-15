@@ -40,15 +40,15 @@ export const SOCIALS: SocialObjects = [
   // },
   {
     name: "Mail",
-    href: "mailto:undefinedmint@proton.me",
+    href: "mailto:hi@mintu.org",
     linkTitle: `Send an email to me`,
     active: true,
   },
-  {
-    name: "WeChat",
-    href: "/assets/wechat-qrcode.jpg",
-    linkTitle: `Add me on WeChat: i__am__mint`,
-    active: true,
-  },
+  // {
+  //   name: "WeChat",
+  //   href: "/assets/wechat-qrcode.jpg",
+  //   linkTitle: `Add me on WeChat: i__am__mint`,
+  //   active: true,
+  // },
   
 ];
