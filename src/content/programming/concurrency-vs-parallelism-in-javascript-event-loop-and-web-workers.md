@@ -6,7 +6,9 @@ pubDatetime: 2024-08-23T12:05:51Z
 featured: false
 draft: false
 tags:
-  - Web
+  - Event Loop
+  - Web Worker
+  - Frontend Performance
 description: ""
 ---
 
@@ -219,3 +221,7 @@ The standard Web Worker we've discussed is technically known as a Dedicated Work
 - **Shared Workers**: A worker that can be accessed by multiple scripts running in different windows, iframes, or even other workers, as long as they share the same origin. This is useful for managing a shared state or coordinating tasks across different parts of an application.
 
 - **Service Workers**: A powerful worker that acts as a proxy between the application and the network. It can intercept and handle network requests, manage a cache of responses, and enable features like offline functionality and push notifications.
+
+
+## 5. Summary
+In summary, understanding the distinction between concurrency and parallelism in JavaScript is crucial for building responsive and efficient web applications. By leveraging the event loop, developers can manage asynchronous tasks without blocking the main thread, while Web Workers enable true parallel processing for heavy computations. Mastering these concepts empowers you to create smoother user experiences and tackle performance bottlenecks in complex front-end projects.

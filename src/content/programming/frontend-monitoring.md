@@ -4,10 +4,11 @@ type: programming
 author: Mint
 pubDatetime: 2025-01-02T14:01:05Z
 featured: false
-draft: false  
+draft: true  
 tags:
-  - Monitor
-description: "A comprehensive guide to frontend monitoring: concepts, key metrics, error collection principles, tools, and best practices."
+  - monitor
+  - Frontend Performance
+description: ""
 ---
 
 ## 1. What is Frontend Monitoring?
@@ -40,11 +41,80 @@ Unlike backend monitoring, which focuses on server health, frontend monitoring c
 ## 2. How Frontend Error Collection Works
 
 ### 1️⃣ Global Error Handlers 
-- `window.onerror`: Captures uncaught JavaScript errors globally, including error message, source file, line and column number.
-- `window.onunhandledrejection`: Specifically listens for unhandled Promise rejections, which are common in modern asynchronous code.
+
+```ts
+// JS Error
+// Captures uncaught JavaScript errors globally, 
+// including error message, source file, line and column number.
+window.addEventListener("error", (e) => {
+  console.log("error", e);
+});
+// Promise Error
+// Specifically listens for unhandled Promise rejections, 
+// which are common in modern asynchronous code.
+window.addEventListener("unhandledrejection", (e) => {
+  console.log("unhandledrejection", e);
+});
+
+// Destroy the error handler when the component unmounts
+return () => {
+  window.removeEventListener("error", handleError);
+  window.removeEventListener("unhandledrejection", handleError);
+}
+```
 
 ### 2️⃣ Resource Loading Errors
+
 Monitors failures of resources such as images, scripts, and stylesheets by listening to the `error` event on those elements.
+
+```ts
+// Resource Loading Error
+// Static resouce loading errors don't bubble up to the window object,
+// They must be handled during the capture phase.
+window.addEventListener("error", (e) => {
+    console.log(getErrorInfoFromErrorEvent(e))
+}, true)
+
+function getErrorInfoFromErrorEvent(e: ErrorEvent) {
+    const target = e.target as HTMLElement;
+
+    const tagName = target.tagName;
+
+    const isSourceErrorEvent = target && tagName;
+
+    if (!isSourceErrorEvent) {
+      // Make sure it's the resource loading error
+      return;
+    }
+
+    const srcAttr = target?.getAttribute('src');
+    // link 
+    const hrefAttr = target?.getAttribute('href');
+
+    return {
+      tagName: tagName,
+      url: srcAttr || hrefAttr,
+    };
+};
+
+// Destroy the error handler when the component unmounts
+return () => {
+  window.removeEventListener("error", getErrorInfoFromErrorEvent);
+}
+```
+
+**Script Error 0 Explained**: 
+
+When monitoring frontend errors, you might encounter a generic error message called **"Script error"**. This often appears as `"Script error."` with no additional information such as file name, line number, or stack trace. This is commonly referred to as **Script Error 0**.
+
+This occurs due to the **Same-Origin Policy** enforced by browsers for security reasons. When a script is loaded from a different origin (domain, protocol, or port) than the hosting page, and an error occurs inside that script, the browser intentionally hides detailed error information to prevent leaking sensitive data across origins.
+
+Add `crossorigin="anonymous"` to the script tag to allow cross-origin requests.
+
+```html
+<script src="https://example.com/script.js" crossorigin="anonymous"></script>
+```
+
 
 ### 3️⃣ Manual Error Reporting
 Developers can use try-catch blocks and explicitly send errors or custom messages to the monitoring service for better context.
@@ -57,7 +127,51 @@ Developers can use try-catch blocks and explicitly send errors or custom message
 ### 5️⃣ Error Aggregation
 Errors are grouped by similarity on the backend to reduce noise and help prioritize fixes based on frequency and impact.
 
-## 3. Frontend Monitoring System Architecture
+
+## 3. How Frontend Performance Collection Works
+
+### 1️⃣ Core Web Vitals
+
+
+### 2️⃣ Resource Loading Time
+
+`PerformanceObserver` is used to observe the performance of the page.
+It can be used to observe the loading time of the page/resources/images/scripts/stylesheets, etc.
+
+```ts
+const observer = new PerformanceObserver((list) => {
+  list.getEntries().forEach((entry) => {
+    console.log(entry);
+  });
+});
+
+observer.observe({ entryTypes: ['resource'] });
+
+// Destroy the observer when the component unmounts
+return () => {
+  observer.disconnect();
+}
+```
+
+But there are some problems:
+- In actual scenarios, a large number of resources are loaded on the first screen, and the loading times are relatively dense. On the contrary, the loading times of resources after the load event are not particularly dense.
+- If we monitor directly as in the code above, every time a resource is loaded successfully, the callback will be called, and the execution time of JavaScript can be too long, which will block the normal rendering of the page, causing performance issues.
+
+The solution is to combine active acquisition and passive monitoring, that is:
+- Use the `load` event as the boundary of the first screen resource loading.
+- Do not monitor before the load event.
+- Once the load event is triggered, actively acquire all resource information by the `performance.getEntriesByType(type)` API.
+- After that, use `PerformanceObserver` to passively monitor the resources.
+
+
+
+### 3️⃣ API Request Time
+
+
+
+
+
+## 4. Frontend Monitoring System Architecture
 
 A complete frontend monitoring system consists of three main components: 
 - **Data Collection and Reporting**  
@@ -70,25 +184,8 @@ A complete frontend monitoring system consists of three main components:
   Dashboards and reports provide insights into frontend health, user experience, and business KPIs. Alerts notify teams of critical issues, enabling fast response.
 
 
-## 4. Choosing the Right Tools 
-
-Selecting the right tools depends on your application’s complexity, tech stack, and business needs. Some popular options include:
-
-- **Sentry**  
-  Comprehensive error and performance monitoring with session replay and rich context capture. Supports most frontend frameworks.
-
-- **Datadog RUM**  
-  Real User Monitoring integrated with full-stack observability.
-
-- **Grafana Faro**  
-  Open-source frontend observability SDK focusing on performance and behavior.
-
-
-  ### Use Sentry as an example
-
-
   
-  ## 5. Best Practices for Effective Frontend Monitoring 
+## 5. Best Practices for Effective Frontend Monitoring 
 
   - **Instrument Early**: Integrate monitoring from the start of development to catch issues early.
   - **Combine Proactive and Reactive Approaches**: Use synthetic tests along with real user monitoring.
