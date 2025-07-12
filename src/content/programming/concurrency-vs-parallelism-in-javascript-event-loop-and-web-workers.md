@@ -210,6 +210,19 @@ const mathWorkerManager = new MathWorkerManager();
 export default mathWorkerManager;
 ```
 
+```ts
+import mathWorkerManager from './MathWorkerManager';
+
+
+mathWorkerManager.evaluate(
+  ['square(3)', 'square(a) + b'],
+  { a: 2, b: 5 },
+  functions
+).then(results => {
+  console.log(results); // [9, 9]
+});
+```
+
 ## 4. Specialized Workers for Different Jobs
 
 The standard Web Worker we've discussed is technically known as a Dedicated Worker, meaning it is tied exclusively to the script that created it. However, the worker ecosystem is broader, offering specialized tools for different challenges. The JavaScript worker family primarily includes three types:
