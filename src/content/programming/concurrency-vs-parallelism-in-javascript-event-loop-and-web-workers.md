@@ -68,8 +68,11 @@ Instead of multi-threading, JavaScript uses an **Event Loop** to manage asynchro
     - Execute all Microtasks (until the microtask queue is empty).
     - Execute **one** Macrotask.
     - Repeat.
-<!-- 
-![SVG ](../../assets/programming/how-javascript-achieves-concurrency-without-multi-threading/event_loop.svg) -->
+
+
+![SVG ](../../assets/programming/event_loop.svg)
+
+
 
 ### How to Intelligently Schedule Tasks on the Main Thread
 JavaScript provides APIs to schedule tasks in ways that optimize responsiveness:
