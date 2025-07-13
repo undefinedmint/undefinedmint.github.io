@@ -9,7 +9,7 @@ tags:
   - Event Loop
   - Web Worker
   - Frontend Performance
-description: ""
+description: "Dive Deep into JavaScript Single-Threaded Nature"
 ---
 
 JavaScript is single-threaded, meaning it can only execute one task at a time. 

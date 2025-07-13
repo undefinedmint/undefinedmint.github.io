@@ -4,11 +4,11 @@ type: programming
 author: Mint
 pubDatetime: 2025-01-02T14:01:05Z
 featured: false
-draft: true  
+draft: false  
 tags:
   - monitor
   - Frontend Performance
-description: ""
+description: "The Key to Building Better Web Applications"
 ---
 
 ## 1. What is Frontend Monitoring?
@@ -124,19 +124,77 @@ Developers can use try-catch blocks and explicitly send errors or custom message
 - Monitoring tools inject SDKs that hook into these handlers, enrich error data with breadcrumbs (user actions before error), device info, and stack traces.
 - Source maps are uploaded to translate minified code stack traces back to original source code, making debugging easier.
 
-### 5️⃣ Error Aggregation
+### 5️⃣ Source Map Upload 
+
+When collecting and reporting frontend errors, uploading sourcemaps is essential for accurate stack trace de-obfuscation. 
+
+Sourcemaps map minified/obfuscated JavaScript code back to the original source, making error stack traces readable and debugging efficient. However, improper handling of sourcemaps can introduce security risks. Here are key points to address in your documentation:
+
+- Do Not Expose Publicly: Never deploy sourcemap files (.map) to your production CDN or make them publicly accessible. Sourcemaps can reveal your original source code, including proprietary logic and comments.
+
+- Upload to Monitoring Service Only: Always upload sourcemaps directly to your error monitoring service via secure channels, not to public web servers.
+
+- Version Matching: Ensure the sourcemap version matches the deployed JavaScript bundle version. Mismatched versions will lead to incorrect stack trace mapping.
+
+- Automate in CI/CD: Integrate sourcemap upload as a step in your CI/CD pipeline to avoid manual errors and ensure consistency.
+
+
+### 6️⃣ Error Aggregation
 Errors are grouped by similarity on the backend to reduce noise and help prioritize fixes based on frequency and impact.
 
 
 ## 3. How Frontend Performance Collection Works
 
+
 ### 1️⃣ Core Web Vitals
+
+Modern browsers provide the `PerformanceObserver` API, which allows you to monitor key user experience metrics in real time. The three most important Core Web Vitals are:
+
+- Largest Contentful Paint (LCP): Measures loading performance by tracking when the largest content element is rendered.
+
+- Interaction to Next Paint (INP): Measures responsiveness by tracking the latency between user interaction and the next paint.
+
+- Cumulative Layout Shift (CLS): Measures visual stability by tracking unexpected layout shifts.
+
+```ts
+// LCP
+const lcpObserver = new PerformanceObserver((list) => {
+  for (const entry of list.getEntries()) {
+    // entry.renderTime is the LCP time
+    console.log('LCP entry:', entry);
+  }
+});
+lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+// INP 
+const inpObserver = new PerformanceObserver((list) => {
+  for (const entry of list.getEntries()) {
+    // entry.duration is the interaction delay
+    console.log('INP entry:', entry);
+  }
+});
+inpObserver.observe({ type: 'event', buffered: true });
+
+// CLS
+let clsValue = 0;
+const clsObserver = new PerformanceObserver((list) => {
+  for (const entry of list.getEntries()) {
+    if (!entry.hadRecentInput) {
+      clsValue += entry.value;
+    }
+  }
+  console.log('Current CLS:', clsValue);
+});
+clsObserver.observe({ type: 'layout-shift', buffered: true });
+
+
+```
+
+The above is just a basic principle, we can use the web-vitals library to implement monitoring.
 
 
 ### 2️⃣ Resource Loading Time
 
-`PerformanceObserver` is used to observe the performance of the page.
-It can be used to observe the loading time of the page/resources/images/scripts/stylesheets, etc.
 
 ```ts
 const observer = new PerformanceObserver((list) => {
@@ -165,12 +223,6 @@ The solution is to combine active acquisition and passive monitoring, that is:
 
 
 
-### 3️⃣ API Request Time
-
-
-
-
-
 ## 4. Frontend Monitoring System Architecture
 
 A complete frontend monitoring system consists of three main components: 
@@ -182,6 +234,9 @@ A complete frontend monitoring system consists of three main components:
 
 - **Data Visualization and Alerting**  
   Dashboards and reports provide insights into frontend health, user experience, and business KPIs. Alerts notify teams of critical issues, enabling fast response.
+
+![PNG](../../assets/programming/monitor-architecture.png)
+
 
 
   
