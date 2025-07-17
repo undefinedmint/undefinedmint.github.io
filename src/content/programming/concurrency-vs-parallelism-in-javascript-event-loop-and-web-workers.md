@@ -9,7 +9,7 @@ tags:
   - Event Loop
   - Web Worker
   - Frontend Performance
-description: ""
+description: "Dive Deep into JavaScript Single-Threaded Nature"
 ---
 
 JavaScript is single-threaded, meaning it can only execute one task at a time. 
@@ -210,6 +210,19 @@ class MathWorkerManager {
 const mathWorkerManager = new MathWorkerManager();
 
 export default mathWorkerManager;
+```
+
+```ts
+import mathWorkerManager from './MathWorkerManager';
+
+
+mathWorkerManager.evaluate(
+  ['square(3)', 'square(a) + b'],
+  { a: 2, b: 5 },
+  functions
+).then(results => {
+  console.log(results); // [9, 9]
+});
 ```
 
 ## 4. Specialized Workers for Different Jobs
