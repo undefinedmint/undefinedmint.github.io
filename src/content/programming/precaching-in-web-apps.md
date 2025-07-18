@@ -45,6 +45,8 @@ Precaching typically leverages a `Service Worker` and the `Cache` API. The Servi
 
 A Service Worker is a background script that intercepts network requests, manages caching, and enables features like offline support and push notifications.
 
+It is like a programmable proxy running in the browser background. You can think of it as a JavaScript thread that lets your app intercept network requests and fake server responses.
+
 
 ### 2.2 Service Worker Lifecycle
 
@@ -57,6 +59,7 @@ A Service Worker is a background script that intercepts network requests, manage
 - `Fetch`: Service Worker intercepts network requests and serves cached responses when available.
 
 The intent of the Service Worker lifecycle is to ensure that the Service Worker is always in a valid state and that the cached resources are always up to date.
+
 
 
 ## 3. Cache API
@@ -99,14 +102,15 @@ My web app (divided into different levels) has two arrays of unique CDN URLs:
 const criticalResources = ["resource1", "resource2", "resource3"];
 const deferredResources = ["resource4", "resource5", "resource6"];
 
-const CRITICAL_CACHE = 'critical-v2';
-const DEFERRED_CACHE = 'deferred-v2';
+const CRITICAL_CACHE = `critical-${CACHE_VERSION}`;
+const DEFERRED_CACHE = `deferred-${CACHE_VERSION}`;
 const CACHE_TIMEOUT = 30000;
 
 // cache critical resources in install phase
 self.addEventListener('install', event => {
   event.waitUntil(
     cacheCriticalResources().finally(() => self.skipWaiting())
+    // Activate the new Service Worker
   );
 });
 
@@ -117,17 +121,10 @@ self.addEventListener('activate', event => {
       cleanupOldCaches(),
       cacheDeferredResources()
     ]).finally(() => self.clients.claim())
+    // Take control of the page immediately
   );
 });
 
-// manually trigger cache
-self.addEventListener('message', event => {
-  if (event.data.type === 'START_CACHE') {
-    cacheCriticalResources().then(cacheDeferredResources);
-  } else if (event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-});
 
 // fetch event: prioritize cache
 self.addEventListener('fetch', event => {
@@ -230,36 +227,50 @@ function Main() {
 
   const retryCache = () => window.location.reload();
 
-  useEffect(() => {
-    let timeoutId;
+   useEffect(() => {
+    let timeoutId: number;
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/CacheServiceWorker.js').then(reg => {
-        // start cache
-        const sw = reg.waiting || reg.active;
-        if (sw) sw.postMessage({ type: 'START_CACHE' });
+        console.log('[Main] Service Worker registered');
 
-        // listen to cache progress
-        navigator.serviceWorker.addEventListener('message', e => {
-          const { type, loaded, total, failed } = e.data || {};
+        // Listen to postMessage regardless of registration state
+        navigator.serviceWorker.onmessage = (event) => {
+          const { type, loaded, total, failed, url, error } = event.data || {};
+
           if (type === 'PRECACHE_PROGRESS') {
             setProgress({
               loaded,
               total,
-              failed: failed || 0,
-              message: `Caching... (${loaded}/${total}${failed ? `, failed:${failed}` : ''})`
+              failed,
+              message: `Caching... (${loaded}/${total}${failed ? `, failed: ${failed}` : ''})`
             });
           }
+
+          if (type === 'PRECACHE_ERROR') {
+            console.warn(`[Main] Caching error on ${url}: ${error}`);
+          }
+
           if (type === 'PRECACHE_CRITICAL_DONE') {
+            console.log('[Main] Critical cache complete');
             setLoading(false);
           }
-        });
+        };
       });
 
-      // timeout automatically allow skip
-      timeoutId = setTimeout(() => setCanSkip(true), 60000);
+      // Allow skip if timeout exceeded
+      timeoutId = window.setTimeout(() => {
+        setCanSkip(true);
+        setProgress(progress => ({
+          ...progress,
+          message: 'Long loading detected. You may skip.'
+        }));
+      }, 60000);
     } else {
+      // fallback: Service Worker not supported
       setLoading(false);
     }
+
     return () => clearTimeout(timeoutId);
   }, []);
 

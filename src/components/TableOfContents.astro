@@ -158,7 +158,16 @@ const filteredHeadings = headings.filter(
         const targetElement = document.getElementById(targetId || '');
         
         if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth' });
+          // 计算目标位置，考虑固定头部的高度
+          const headerHeight = 140; // 固定头部高度 + 一些缓冲空间
+          const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
+          
+          // 平滑滚动到计算出的位置
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+          
           // 更新URL但不跳转页面
           history.pushState(null, '', `#${targetId}`);
         }
