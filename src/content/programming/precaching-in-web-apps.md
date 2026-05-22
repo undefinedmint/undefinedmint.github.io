@@ -1,7 +1,7 @@
 ---
 title: Precaching in Web Apps
 type: programming
-author: Mint
+author: Ruby
 pubDatetime: 2024-06-12T03:12:00Z
 featured: false
 draft: false  

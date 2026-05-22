@@ -2,10 +2,10 @@ import type { Site, SocialObjects } from "./types";
 
 export const SITE: Site = {
   website: "https://mintu.org", // replace this with your deployed domain
-  author: "Mint",
+  author: "Ruby",
   profile: "https://satnaing.dev/",
-  desc: "Mint's Hello World",
-  title: "Mint's Blog",
+  desc: "Ruby's Hello World",
+  title: "Ruby's Blog",
   ogImage: "astropaper-og.jpg", // website image
   lightAndDarkMode: true,
   postPerIndex: 4,

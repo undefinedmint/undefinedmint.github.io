@@ -1,10 +1,10 @@
 ---
 title: How to Write Readable Code
 type: programming
-author: Mint
+author: Ruby
 pubDatetime: 2023-04-23T11:59:05Z
 featured: false
-draft: false  
+draft: false
 tags:
   - Code Style
 description: "The essential principles and best practices for writing clean, readable code that enhances maintainability and team collaboration."
@@ -39,7 +39,7 @@ const u = users.filter(x => x.s === 1);
 
 // Good: Clear and descriptive
 const currentDate = new Date();
-const activeUsers = users.filter(user => user.status === 'active');
+const activeUsers = users.filter(user => user.status === "active");
 ```
 
 #### Function Naming Guidelines
@@ -47,12 +47,12 @@ const activeUsers = users.filter(user => user.status === 'active');
 ```javascript
 // Bad: Vague and non-descriptive
 function calc(a, b) {
-    return a + b * 0.08;
+  return a + b * 0.08;
 }
 
 // Good: Explains what and why
 function calculateTotalWithTax(price, taxRate) {
-    return price + (price * taxRate);
+  return price + price * taxRate;
 }
 ```
 
@@ -64,35 +64,35 @@ Large functions are difficult to understand and maintain. Follow the Single Resp
 
 ```javascript
 function processOrder(order) {
-    // Validate order
-    if (!order || !order.items || order.items.length === 0) {
-        throw new Error('Invalid order');
+  // Validate order
+  if (!order || !order.items || order.items.length === 0) {
+    throw new Error("Invalid order");
+  }
+
+  // Calculate subtotal
+  let subtotal = 0;
+  for (const item of order.items) {
+    if (item.inStock) {
+      subtotal += item.price * item.quantity;
     }
-    
-    // Calculate subtotal
-    let subtotal = 0;
-    for (const item of order.items) {
-        if (item.inStock) {
-            subtotal += item.price * item.quantity;
-        }
-    }
-    
-    // Calculate tax
-    const taxRate = order.region === 'US' ? 0.08 : 0.20;
-    const tax = subtotal * taxRate;
-    
-    // Calculate shipping
-    let shipping = 0;
-    if (subtotal < 100) {
-        shipping = 10;
-    }
-    
-    return {
-        subtotal,
-        tax,
-        shipping,
-        total: subtotal + tax + shipping
-    };
+  }
+
+  // Calculate tax
+  const taxRate = order.region === "US" ? 0.08 : 0.2;
+  const tax = subtotal * taxRate;
+
+  // Calculate shipping
+  let shipping = 0;
+  if (subtotal < 100) {
+    shipping = 10;
+  }
+
+  return {
+    subtotal,
+    tax,
+    shipping,
+    total: subtotal + tax + shipping,
+  };
 }
 ```
 
@@ -100,40 +100,40 @@ function processOrder(order) {
 
 ```javascript
 function processOrder(order) {
-    validateOrder(order);
-    
-    const subtotal = calculateSubtotal(order.items);
-    const tax = calculateTax(subtotal, order.region);
-    const shipping = calculateShipping(subtotal);
-    
-    return {
-        subtotal,
-        tax,
-        shipping,
-        total: subtotal + tax + shipping
-    };
+  validateOrder(order);
+
+  const subtotal = calculateSubtotal(order.items);
+  const tax = calculateTax(subtotal, order.region);
+  const shipping = calculateShipping(subtotal);
+
+  return {
+    subtotal,
+    tax,
+    shipping,
+    total: subtotal + tax + shipping,
+  };
 }
 
 function validateOrder(order) {
-    if (!order || !order.items || order.items.length === 0) {
-        throw new Error('Invalid order');
-    }
+  if (!order || !order.items || order.items.length === 0) {
+    throw new Error("Invalid order");
+  }
 }
 
 function calculateSubtotal(items) {
-    return items
-        .filter(item => item.inStock)
-        .reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  return items
+    .filter(item => item.inStock)
+    .reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 
 function calculateTax(subtotal, region) {
-    const taxRates = { US: 0.08, EU: 0.20 };
-    return subtotal * (taxRates[region] || 0);
+  const taxRates = { US: 0.08, EU: 0.2 };
+  return subtotal * (taxRates[region] || 0);
 }
 
 function calculateShipping(subtotal) {
-    const FREE_SHIPPING_THRESHOLD = 100;
-    return subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 10;
+  const FREE_SHIPPING_THRESHOLD = 100;
+  return subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 10;
 }
 ```
 
@@ -145,19 +145,19 @@ Consistent formatting makes code easier to scan and understand. Use tools like P
 
 ```javascript
 // Bad: Inconsistent formatting
-function calculateDiscount(orderTotal,hasPromoCode){
-if(orderTotal>100&&!hasPromoCode){
-return orderTotal*0.1;
-}
-return 0;
+function calculateDiscount(orderTotal, hasPromoCode) {
+  if (orderTotal > 100 && !hasPromoCode) {
+    return orderTotal * 0.1;
+  }
+  return 0;
 }
 
 // Good: Consistent, readable formatting
 function calculateDiscount(orderTotal, hasPromoCode) {
-    if (orderTotal > 100 && !hasPromoCode) {
-        return orderTotal * 0.1;
-    }
-    return 0;
+  if (orderTotal > 100 && !hasPromoCode) {
+    return orderTotal * 0.1;
+  }
+  return 0;
 }
 ```
 
@@ -167,7 +167,10 @@ Keep lines reasonably short (80-120 characters) and break long expressions logic
 
 ```javascript
 // Bad: Long, hard-to-read line
-const result = calculateTotalWithTax(basePrice, taxRate) + calculateShippingCost(weight, distance, expedited) + calculateHandlingFee(fragile, insurance);
+const result =
+  calculateTotalWithTax(basePrice, taxRate) +
+  calculateShippingCost(weight, distance, expedited) +
+  calculateHandlingFee(fragile, insurance);
 
 // Good: Properly broken for readability
 const subtotal = calculateTotalWithTax(basePrice, taxRate);
@@ -195,7 +198,7 @@ users.forEach(user => checkUserStatus(user));
 // Apply bulk discount only for orders over $500 without existing promotions
 // This helps us clear inventory while maintaining profit margins
 if (orderTotal > 500 && !hasActivePromotion) {
-    discount = orderTotal * BULK_DISCOUNT_RATE;
+  discount = orderTotal * BULK_DISCOUNT_RATE;
 }
 ```
 
@@ -206,26 +209,26 @@ For complex algorithms or business logic, provide clear documentation:
 ```javascript
 /**
  * Implements exponential backoff for API retry logic
- * 
+ *
  * Retries failed requests with increasing delays to avoid overwhelming
  * the server during outages. Uses jitter to prevent thundering herd problems.
- * 
+ *
  * @param {Function} apiCall - The API function to retry
  * @param {number} maxRetries - Maximum number of retry attempts
  * @returns {Promise} - Resolves with API response or rejects after max retries
  */
 async function retryWithBackoff(apiCall, maxRetries = 3) {
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        try {
-            return await apiCall();
-        } catch (error) {
-            if (attempt === maxRetries) throw error;
-            
-            // Exponential backoff with jitter
-            const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-            await sleep(delay);
-        }
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await apiCall();
+    } catch (error) {
+      if (attempt === maxRetries) throw error;
+
+      // Exponential backoff with jitter
+      const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
+      await sleep(delay);
     }
+  }
 }
 ```
 
@@ -238,27 +241,27 @@ Deep nesting makes code hard to follow. Use early returns and guard clauses to r
 ```javascript
 // Bad: Deep nesting
 function processUser(user) {
-    if (user) {
-        if (user.isActive) {
-            if (user.hasPermission) {
-                if (user.subscription.isValid) {
-                    // Process user
-                    return performAction(user);
-                }
-            }
+  if (user) {
+    if (user.isActive) {
+      if (user.hasPermission) {
+        if (user.subscription.isValid) {
+          // Process user
+          return performAction(user);
         }
+      }
     }
-    return null;
+  }
+  return null;
 }
 
 // Good: Early returns reduce nesting
 function processUser(user) {
-    if (!user) return null;
-    if (!user.isActive) return null;
-    if (!user.hasPermission) return null;
-    if (!user.subscription.isValid) return null;
-    
-    return performAction(user);
+  if (!user) return null;
+  if (!user.isActive) return null;
+  if (!user.hasPermission) return null;
+  if (!user.subscription.isValid) return null;
+
+  return performAction(user);
 }
 ```
 
@@ -268,19 +271,19 @@ Organize related functionality together and separate concerns with blank lines:
 
 ```javascript
 function setupUserProfile(userData) {
-    // Validation
-    validateUserData(userData);
-    checkPermissions(userData.role);
-    
-    // Data processing
-    const processedData = normalizeUserData(userData);
-    const profileImage = generateAvatar(processedData.name);
-    
-    // Database operations
-    const user = createUserRecord(processedData);
-    saveProfileImage(user.id, profileImage);
-    
-    return user;
+  // Validation
+  validateUserData(userData);
+  checkPermissions(userData.role);
+
+  // Data processing
+  const processedData = normalizeUserData(userData);
+  const profileImage = generateAvatar(processedData.name);
+
+  // Database operations
+  const user = createUserRecord(processedData);
+  saveProfileImage(user.id, profileImage);
+
+  return user;
 }
 ```
 
@@ -293,41 +296,41 @@ Don't Repeat Yourself (DRY) - extract common patterns into reusable functions:
 ```javascript
 // Bad: Duplicated validation logic
 function validateUserEmail(email) {
-    if (!email || email.length === 0) {
-        throw new Error('Email is required');
-    }
-    if (!email.includes('@')) {
-        throw new Error('Invalid email format');
-    }
+  if (!email || email.length === 0) {
+    throw new Error("Email is required");
+  }
+  if (!email.includes("@")) {
+    throw new Error("Invalid email format");
+  }
 }
 
 function validateUserName(name) {
-    if (!name || name.length === 0) {
-        throw new Error('Name is required');
-    }
-    if (name.length < 2) {
-        throw new Error('Name too short');
-    }
+  if (!name || name.length === 0) {
+    throw new Error("Name is required");
+  }
+  if (name.length < 2) {
+    throw new Error("Name too short");
+  }
 }
 
 // Good: Reusable validation pattern
 function validateRequired(value, fieldName) {
-    if (!value || value.length === 0) {
-        throw new Error(`${fieldName} is required`);
-    }
+  if (!value || value.length === 0) {
+    throw new Error(`${fieldName} is required`);
+  }
 }
 
 function validateMinLength(value, minLength, fieldName) {
-    if (value.length < minLength) {
-        throw new Error(`${fieldName} must be at least ${minLength} characters`);
-    }
+  if (value.length < minLength) {
+    throw new Error(`${fieldName} must be at least ${minLength} characters`);
+  }
 }
 
 function validateEmail(email) {
-    validateRequired(email, 'Email');
-    if (!email.includes('@')) {
-        throw new Error('Invalid email format');
-    }
+  validateRequired(email, "Email");
+  if (!email.includes("@")) {
+    throw new Error("Invalid email format");
+  }
 }
 ```
 
@@ -339,23 +342,23 @@ Tests should tell a story about what your code does and how it should behave:
 
 ```javascript
 // Bad: Unclear test intent
-test('user test', () => {
-    const u = { name: 'John', age: 25, role: 'admin' };
-    const result = fn(u);
-    expect(result).toBe(true);
+test("user test", () => {
+  const u = { name: "John", age: 25, role: "admin" };
+  const result = fn(u);
+  expect(result).toBe(true);
 });
 
 // Good: Clear test story
-test('should grant access to admin users over 18', () => {
-    const adminUser = {
-        name: 'John Doe',
-        age: 25,
-        role: 'admin'
-    };
-    
-    const hasAccess = checkUserAccess(adminUser);
-    
-    expect(hasAccess).toBe(true);
+test("should grant access to admin users over 18", () => {
+  const adminUser = {
+    name: "John Doe",
+    age: 25,
+    role: "admin",
+  };
+
+  const hasAccess = checkUserAccess(adminUser);
+
+  expect(hasAccess).toBe(true);
 });
 ```
 
@@ -377,11 +380,11 @@ Configure your development environment to support readable code:
 ```json
 // .vscode/settings.json
 {
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    },
-    "editor.rulers": [80, 120]
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.rulers": [80, 120]
 }
 ```
 
@@ -408,14 +411,14 @@ Stick to consistent naming patterns throughout your codebase:
 
 ```javascript
 // Bad: Inconsistent naming
-const userName = 'John';
+const userName = "John";
 const user_age = 25;
-const UserRole = 'admin';
+const UserRole = "admin";
 
 // Good: Consistent camelCase
-const userName = 'John';
+const userName = "John";
 const userAge = 25;
-const userRole = 'admin';
+const userRole = "admin";
 ```
 
 ## 9. Conclusion
