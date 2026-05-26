@@ -161,7 +161,7 @@ class MathWorkerManager {
 
   init() {
     if (!this.worker) {
-      this.worker = new Worker("./mathWorker.js");
+      this.worker = new Worker(new URL('./mathWorker.js', import.meta.url));
       this.worker.onmessage = this.handleMessage.bind(this);
     }
   }
